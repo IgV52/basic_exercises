@@ -5,6 +5,8 @@
 # Маша: 2
 # Петя: 2
 
+from collections import Counter
+
 students = [
     {'first_name': 'Вася'},
     {'first_name': 'Петя'},
@@ -12,8 +14,9 @@ students = [
     {'first_name': 'Маша'},
     {'first_name': 'Петя'},
 ]
-# ???
-
+student = Counter([name['first_name'] for name in students])
+for key in student:
+    print(key, student[key])
 
 # Задание 2
 # Дан список учеников, нужно вывести самое часто повторящееся имя
@@ -26,7 +29,14 @@ students = [
     {'first_name': 'Маша'},
     {'first_name': 'Оля'},
 ]
-# ???
+student = Counter([name['first_name'] for name in students])
+max_name = 0
+big_name = ''
+for key in student:
+    if student[key] > max_name:
+        max_name = student[key]
+        big_name = key
+print(f'Самое частое имя среди учеников: {big_name}')
 
 
 # Задание 3
@@ -51,8 +61,19 @@ school_students = [
         {'first_name': 'Саша'},
     ],
 ]
-# ???
-
+often_name = []
+num_class = 0
+for group in school_students:
+    student = Counter([name['first_name'] for name in group])
+    max_name = 0
+    big_name = ''
+    for key in student:
+        if student[key] > max_name:
+            max_name = student[key]
+            big_name = key
+    num_class += 1
+    often_name.append(f'Самое частое имя в классе {num_class}: {big_name}')
+print(*often_name, sep='\n')
 
 # Задание 4
 # Для каждого класса нужно вывести количество девочек и мальчиков в нём.
@@ -63,7 +84,7 @@ school_students = [
 school = [
     {'class': '2a', 'students': [{'first_name': 'Маша'}, {'first_name': 'Оля'}]},
     {'class': '2б', 'students': [{'first_name': 'Олег'}, {'first_name': 'Миша'}]},
-    {'class': '2б', 'students': [{'first_name': 'Даша'}, {'first_name': 'Олег'}, {'first_name': 'Маша'}]},
+    {'class': '2в', 'students': [{'first_name': 'Даша'}, {'first_name': 'Олег'}, {'first_name': 'Маша'}]},
 ]
 is_male = {
     'Олег': True,
@@ -72,7 +93,23 @@ is_male = {
     'Миша': True,
     'Даша': False,
 }
-# ???
+info_class = []
+for groups in school:
+    for group in groups:
+            if isinstance(groups[group], str):
+                num_class = groups[group]
+            if isinstance(groups[group], list):
+                male = 0
+                girl = 0
+                for student in groups[group]:
+                    if not is_male[student['first_name']]:
+                        girl += 1
+                    else:
+                        male += 1
+                info_class.append(f'Класс {num_class}: девочки {girl}, мальчики {male}')
+print(*info_class, sep='\n')
+
+        
 
 
 # Задание 5
@@ -91,5 +128,34 @@ is_male = {
     'Олег': True,
     'Миша': True,
 }
-# ???
+info_class = []
+for groups in school:
+    for group in groups:
+        if isinstance(groups[group], str):
+            num_class = groups[group]
+        if isinstance(groups[group], list):
+            male = 0
+            girl = 0
+            for student in groups[group]:
+                if is_male[student['first_name']]:
+                    male += 1
+                else:
+                    girl += 1
+            info_class.append(f'{num_class},{girl},{male}')
+variants = 0
+for info in info_class:
+    variants += 1
+    if variants == 1:
+        class1 = info.split(',')
+    else:
+        class2 = info.split(',')
+
+if class1[2] > class2[2]:
+    print(f'Больше всего мальчиков в классе {class1[0]}')
+if class1[2] < class2[2]:
+    print(f'Больше всего мальчиков в классе {class2[0]}')
+if class1[1] > class2[1]:
+    print(f'Больше всего девочек в классе {class1[0]}')
+if class1[1] < class2[1]:
+    print(f'Больше всего девочек в классе {class2[0]}')
 
